@@ -1,0 +1,10 @@
+{
+  "_hinweis": "Dieses Manifest ist ein Gerüst für eine spätere PWA-Phase und wird aktuell NICHT von index.html referenziert (PWA war laut Vorgabe noch nicht zu implementieren). Erst mit <link rel=\"manifest\" href=\"manifest.json\"> in index.html aktivieren.",
+  "name": "Guitar Practice Trainer — Acoustix Guitar",
+  "short_name": "Practice Trainer",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAF6EE",
+  "theme_color": "#C1684B",
+  "icons": []
+}

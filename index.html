@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guitar Practice Trainer — Acoustix Guitar</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="app">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="17" cy="17" r="16" fill="#C1684B"/>
+            <circle cx="17" cy="17" r="6.5" fill="#FAF6EE"/>
+            <circle cx="17" cy="17" r="2.4" fill="#3E6C6A"/>
+          </svg>
+          <span class="brand-title">ACOUSTIX GUITAR</span>
+        </div>
+        <span class="brand-eyebrow">Wolfram Fiedler</span>
+      </div>
+    </div>
+    <div class="brand-sub" style="max-width:1080px; margin:0 auto; padding-left:calc(var(--space-3) + 2.35rem); padding-right:var(--space-3); padding-bottom:var(--space-2);">
+      Guitar Practice Trainer
+    </div>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <div class="nav-scroll" id="navScroll" role="tablist"></div>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- DASHBOARD -->
+    <section class="view" id="view-dashboard" data-view="dashboard">
+
+      <div class="hero-card">
+        <div class="hero-greeting" id="greetingText">Guten Morgen!</div>
+        <div class="hero-sub">Dein Training heute</div>
+        <div class="hero-meta">
+          <div>Tag <strong id="dayCount">1</strong> von <strong>30</strong></div>
+          <div><strong id="goalMinutes">15</strong> Minuten Tagesziel</div>
+        </div>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
+          <div class="progress-fill" id="progressFill" style="width:0%;"></div>
+        </div>
+        <button class="btn btn-primary" id="startTrainingBtn">▶ TRAINING STARTEN</button>
+      </div>
+
+      <h2 class="section-title">Tagesplan</h2>
+      <div class="plan-list" id="planList"></div>
+
+      <h2 class="section-title">Übungen</h2>
+      <div class="card-grid" id="exerciseGrid"></div>
+
+      <div class="quicklink-card">
+        <div class="quicklink-text">
+          <strong>🎸 Akkorddatenbank</strong>
+          <span>Akkorde nachschlagen und üben</span>
+        </div>
+        <button class="btn btn-secondary btn-small" type="button" id="dashboardChordsLinkBtn">Öffnen</button>
+      </div>
+
+      <div class="quicklink-card" id="dashboardProgressCard" hidden>
+        <div class="quicklink-text">
+          <strong>Dein Fortschritt</strong>
+        </div>
+        <button class="btn btn-secondary btn-small" type="button" id="dashboardProgressLinkBtn">Fortschritt anzeigen</button>
+      </div>
+
+      <div class="quicklink-card">
+        <div class="quicklink-text">
+          <strong>📚 Übungsbibliothek</strong>
+          <span>Alle Übungen durchsuchen und filtern</span>
+        </div>
+        <button class="btn btn-secondary btn-small" type="button" id="dashboardLibraryLinkBtn">Öffnen</button>
+      </div>
+
+    </section>
+
+    <!-- MEIN TRAINING -->
+    <section class="view" id="view-training" data-view="training">
+
+      <h2 class="section-title" style="margin-top:0;">Mein Training</h2>
+
+      <!-- TRAININGSPLAN-AUSWAHL (nur sichtbar bei mehreren Plänen) -->
+      <div class="metro-card" id="dailyPlanSelectorCard" hidden>
+        <div class="metro-card-header">
+          <h3>Aktiver Trainingsplan</h3>
+        </div>
+        <div id="dailyPlanName"></div>
+        <div class="option-row" id="dailyPlanOptions"></div>
+      </div>
+
+      <!-- ÜBERSICHT -->
+      <div class="trainer-screen" id="dailyScreenOverview">
+        <div class="metro-card">
+          <div class="daily-overview-day" id="dailyOverviewDay">Tag 1</div>
+          <h3 id="dailyOverviewTitle">—</h3>
+          <p class="trainer-prep-description" id="dailyOverviewDesc"></p>
+          <div class="daily-overview-total" id="dailyOverviewTotal">0 Minuten</div>
+
+          <div class="daily-section-list" id="dailySectionList"></div>
+
+          <button class="btn btn-primary btn-block metro-start-btn" type="button" id="dailyStartBtn">▶ TRAINING STARTEN</button>
+        </div>
+      </div>
+
+      <!-- AKTIVES TRAINING -->
+      <div class="trainer-screen" id="dailyScreenActive" hidden>
+
+        <div class="daily-progress-row">
+          <span id="dailyProgressLabel">Einheit 1 von 4</span>
+          <span id="dailyProgressPercent">0 %</span>
+        </div>
+        <div class="progress-track" id="dailyProgressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-fill" id="dailyProgressFill" style="width:0%;"></div>
+        </div>
+
+        <div class="metro-card daily-section-card">
+          <div class="trainer-chord-tag" id="dailySectionKind">ÜBUNG</div>
+          <h3 id="dailySectionTitle">—</h3>
+          <p class="trainer-prep-description" id="dailySectionDescription"></p>
+          <div class="daily-timer-display" id="dailySectionTimer">00:00</div>
+          <div class="daily-next-hint" id="dailyNextHint"></div>
+        </div>
+
+        <div class="trainer-controls daily-controls">
+          <button class="btn btn-secondary" type="button" id="dailySkipBtn">ÜBERSPRINGEN</button>
+          <button class="btn btn-secondary" type="button" id="dailyPauseBtn">PAUSE</button>
+          <button class="btn btn-secondary" type="button" id="dailyStopBtn">TRAINING BEENDEN</button>
+        </div>
+      </div>
+
+      <!-- BEENDEN-BESTÄTIGUNG -->
+      <div class="trainer-screen" id="dailyScreenConfirmStop" hidden>
+        <div class="metro-card trainer-results-card">
+          <h3>Training wirklich beenden?</h3>
+          <div class="trainer-results-actions">
+            <button class="btn btn-primary" type="button" id="dailyConfirmStopBtn">JA, BEENDEN</button>
+            <button class="btn btn-secondary" type="button" id="dailyCancelStopBtn">WEITERTRAINIEREN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABSCHLUSS -->
+      <div class="trainer-screen" id="dailyScreenComplete" hidden>
+        <div class="metro-card trainer-results-card">
+          <h3 id="dailyCompleteHeadline">Training geschafft!</h3>
+          <p id="dailyCompleteText"></p>
+          <div class="trainer-results-actions">
+            <button class="btn btn-secondary" type="button" id="dailyAgainBtn">NOCH EINMAL</button>
+            <button class="btn btn-primary" type="button" id="dailyDoneBtn">HEUTE FERTIG</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="view" id="view-trainer" data-view="trainer">
+
+      <h2 class="section-title" style="margin-top:0;">Akkordwechseltrainer</h2>
+
+      <!-- AUSWAHL -->
+      <div class="trainer-screen" id="trainerScreenList">
+        <input type="search" class="chord-search-input" id="trainerSearchInput"
+          placeholder="Übung suchen …" aria-label="Übung suchen">
+        <div class="chip-row" id="trainerFilterRow" aria-label="Übungsfilter"></div>
+        <div class="trainer-exercise-list" id="trainerExerciseList"></div>
+      </div>
+
+      <!-- VORBEREITUNG -->
+      <div class="trainer-screen" id="trainerScreenPrep" hidden>
+        <div class="metro-card">
+          <h3 id="trainerPrepName">—</h3>
+          <p class="trainer-prep-description" id="trainerPrepDescription"></p>
+          <div class="trainer-prep-chords" id="trainerPrepChords"></div>
+
+          <div class="field">
+            <label id="trainerTempoLabel">Tempo</label>
+            <div class="metro-bpm-controls" role="group" aria-labelledby="trainerTempoLabel">
+              <button class="btn btn-secondary btn-small" type="button" data-trainer-bpm-step="-5" aria-label="Minus 5 BPM">−5</button>
+              <button class="btn btn-secondary btn-small" type="button" data-trainer-bpm-step="-1" aria-label="Minus 1 BPM">−</button>
+              <span class="trainer-prep-bpm" id="trainerPrepBpm">60</span>
+              <button class="btn btn-secondary btn-small" type="button" data-trainer-bpm-step="1" aria-label="Plus 1 BPM">+</button>
+              <button class="btn btn-secondary btn-small" type="button" data-trainer-bpm-step="5" aria-label="Plus 5 BPM">+5</button>
+            </div>
+          </div>
+
+          <div class="trainer-prep-actions">
+            <button class="btn btn-secondary" type="button" id="trainerBackToListBtn">Zurück</button>
+            <button class="btn btn-primary btn-block" type="button" id="trainerStartBtn">▶ TRAINING STARTEN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AKTIVES TRAINING -->
+      <div class="trainer-screen" id="trainerScreenActive" hidden>
+
+        <div class="trainer-countin" id="trainerCountIn" hidden>
+          <div class="trainer-countin-label">Einzählen</div>
+          <div class="trainer-countin-number" id="trainerCountInNumber">1</div>
+          <div class="trainer-countin-hint" id="trainerCountInHint"></div>
+        </div>
+
+        <div class="trainer-active" id="trainerActive" hidden>
+
+          <div class="trainer-progress-row">
+            <span class="trainer-progress-time" id="trainerProgressDisplay">00:60</span>
+            <span class="trainer-progress-changes" id="trainerChangesDisplay">Wechsel: 0</span>
+          </div>
+
+          <div class="trainer-chord-stage">
+            <div class="trainer-current-chord">
+              <div class="trainer-chord-tag">JETZT</div>
+              <div class="trainer-chord-diagram" id="trainerCurrentDiagram"></div>
+              <div class="trainer-chord-name" id="trainerCurrentName">C</div>
+              <div class="trainer-chord-fullname" id="trainerCurrentFullname">C-Dur</div>
+            </div>
+
+            <div class="trainer-next-chord">
+              <div class="trainer-chord-tag">NÄCHSTER AKKORD</div>
+              <div class="trainer-chord-diagram trainer-chord-diagram-small" id="trainerNextDiagram"></div>
+              <div class="trainer-chord-name-small" id="trainerNextName">G</div>
+            </div>
+          </div>
+
+          <div class="trainer-sequence-trail" id="trainerSequenceTrail" aria-hidden="true"></div>
+
+          <div class="trainer-controls">
+            <button class="btn btn-secondary" type="button" id="trainerPauseBtn">PAUSE</button>
+            <button class="btn btn-secondary" type="button" id="trainerStopBtn">STOPP</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ERGEBNIS -->
+      <div class="trainer-screen" id="trainerScreenResults" hidden>
+        <div class="metro-card trainer-results-card">
+          <h3>Training beendet</h3>
+          <div class="trainer-results-name" id="trainerResultsName">—</div>
+          <div class="trainer-results-stats" id="trainerResultsStats"></div>
+          <div class="trainer-results-actions">
+            <button class="btn btn-primary" type="button" id="trainerAgainBtn">NOCHMAL</button>
+            <button class="btn btn-secondary" type="button" id="trainerOtherBtn">ANDERE ÜBUNG</button>
+            <button class="btn btn-secondary" type="button" id="trainerDoneBtn">FERTIG</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="view" id="view-metronom" data-view="metronom">
+
+      <h2 class="section-title" style="margin-top:0;">Metronom</h2>
+
+      <div class="metro-context-banner" id="metroContextBanner" hidden>
+        <span id="metroContextText"></span>
+        <button class="btn btn-secondary btn-small" type="button" id="metroExitContextBtn">Übungsmodus verlassen</button>
+      </div>
+
+      <div class="metro-hero">
+        <div class="metro-bpm-display">
+          <span class="metro-bpm-number" id="metroBpmValue">80</span>
+          <span class="metro-bpm-label">BPM</span>
+        </div>
+
+        <div class="metro-bpm-controls">
+          <button class="btn btn-secondary btn-small" type="button" data-bpm-step="-5" aria-label="Minus 5 BPM">−5</button>
+          <button class="btn btn-secondary btn-small" type="button" data-bpm-step="-1" aria-label="Minus 1 BPM">−</button>
+          <input type="number" class="metro-bpm-input" id="metroBpmInput" min="40" max="240" value="80" aria-label="BPM direkt eingeben">
+          <button class="btn btn-secondary btn-small" type="button" data-bpm-step="1" aria-label="Plus 1 BPM">+</button>
+          <button class="btn btn-secondary btn-small" type="button" data-bpm-step="5" aria-label="Plus 5 BPM">+5</button>
+        </div>
+
+        <input type="range" class="metro-bpm-slider" id="metroBpmSlider" min="40" max="240" value="80" aria-label="Tempo-Regler">
+
+        <div class="chip-row" id="metroQuickTempoRow" aria-label="Schnellwahl Tempo"></div>
+        <div class="chip-row chip-row-wide" id="metroPresetRow" aria-label="Tempo-Presets"></div>
+      </div>
+
+      <div class="metro-card">
+        <h3>Takt &amp; Unterteilung</h3>
+        <div class="field">
+          <label id="metroTimeSigLabel">Taktart</label>
+          <div class="option-row" id="metroTimeSigRow" role="group" aria-labelledby="metroTimeSigLabel"></div>
+        </div>
+        <div class="field">
+          <label id="metroSubdivisionLabel">Unterteilung</label>
+          <div class="option-row" id="metroSubdivisionRow" role="group" aria-labelledby="metroSubdivisionLabel"></div>
+        </div>
+      </div>
+
+      <div class="metro-card">
+        <h3>Klang</h3>
+        <div class="field">
+          <label for="metroVolumeSlider">Lautstärke — <span id="metroVolumeValue">70 %</span></label>
+          <input type="range" id="metroVolumeSlider" min="0" max="100" value="70">
+        </div>
+        <div class="field" id="metroSwingField">
+          <label for="metroSwingSlider">Swing — <span id="metroSwingValue">50 %</span></label>
+          <input type="range" id="metroSwingSlider" min="50" max="75" value="50">
+          <span class="field-hint">Nur bei Achtel-Unterteilung aktiv.</span>
+        </div>
+        <button class="btn btn-secondary" type="button" id="metroAccentBtn" aria-pressed="true">AKZENT AN</button>
+      </div>
+
+      <div class="metro-visual-card">
+        <div class="beat-indicator" id="metroBeatIndicator" role="img"></div>
+        <div class="pendulum" aria-hidden="true">
+          <div class="pendulum-arm" id="metroPendulumArm"><span class="pendulum-bob"></span></div>
+          <div class="pendulum-base"></div>
+        </div>
+      </div>
+
+      <div class="metro-tap-row">
+        <button class="btn btn-secondary btn-block metro-tap-btn" type="button" id="metroTapBtn">TAP TEMPO</button>
+        <div class="metro-hint" id="metroTapHint"></div>
+      </div>
+
+      <button class="btn btn-primary btn-block metro-start-btn" type="button" id="metroStartBtn" aria-pressed="false">▶ START</button>
+
+      <div class="metro-hint" id="metroStatusHint" role="status" aria-live="polite"></div>
+
+      <div class="metro-card">
+        <div class="metro-card-header">
+          <h3>Tempo-Training</h3>
+          <button class="btn btn-secondary btn-small" type="button" id="metroTrainingToggleBtn">Öffnen</button>
+        </div>
+        <div class="metro-training-panel" id="metroTrainingPanel" hidden>
+          <div class="metro-training-grid">
+            <div class="field">
+              <label for="metroTrainStartBpm">Start-BPM</label>
+              <input type="number" id="metroTrainStartBpm" min="40" max="240" value="60">
+            </div>
+            <div class="field">
+              <label for="metroTrainTargetBpm">Ziel-BPM</label>
+              <input type="number" id="metroTrainTargetBpm" min="40" max="240" value="100">
+            </div>
+            <div class="field">
+              <label for="metroTrainStep">Schritt (BPM)</label>
+              <input type="number" id="metroTrainStep" min="1" max="20" value="5">
+            </div>
+            <div class="field">
+              <label for="metroTrainDuration">Dauer je Tempo</label>
+              <select id="metroTrainDuration">
+                <option value="30">30 Sekunden</option>
+                <option value="60">60 Sekunden</option>
+                <option value="120">120 Sekunden</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" type="button" id="metroTrainStartBtn">Tempo-Training starten</button>
+
+          <div class="metro-training-status" id="metroTrainStatus" hidden>
+            <p>Aktuelles Tempo läuft — verbleibend: <strong id="metroTrainCountdown">30 s</strong></p>
+          </div>
+
+          <div class="metro-training-decision" id="metroTrainDecision" hidden>
+            <p>Tempo geschafft?</p>
+            <div class="timer-controls">
+              <button class="btn btn-primary" type="button" id="metroTrainContinueBtn">JA — WEITER</button>
+              <button class="btn btn-secondary" type="button" id="metroTrainRepeatBtn">NOCHMAL</button>
+              <button class="btn btn-secondary" type="button" id="metroTrainCancelBtn">ABBRECHEN</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" type="button" id="metroResetBtn">EINSTELLUNGEN ZURÜCKSETZEN</button>
+
+    </section>
+
+    <!-- AKKORDE -->
+    <section class="view" id="view-akkorde" data-view="akkorde">
+
+      <h2 class="section-title" style="margin-top:0;">Akkorde</h2>
+
+      <div class="chords-layout">
+
+        <div class="chord-list-panel">
+          <input type="search" class="chord-search-input" id="chordSearchInput"
+            placeholder="Suche nach Akkord …" aria-label="Akkord suchen">
+
+          <div class="chip-row chord-filter-row" id="chordFilterRow" aria-label="Akkord-Filter"></div>
+
+          <div class="chord-list" id="chordList"></div>
+
+          <button class="btn btn-secondary btn-small chord-reset-fav-btn" type="button" id="chordResetFavBtn">
+            Favoriten zurücksetzen
+          </button>
+        </div>
+
+        <div class="chord-detail-panel" id="chordDetail"></div>
+
+      </div>
+
+    </section>
+
+    <!-- 30-TAGE-PROGRAMM -->
+    <section class="view" id="view-programm" data-view="programm">
+
+      <h2 class="section-title" style="margin-top:0;">30-Tage-Programm</h2>
+
+      <!-- ÜBERSICHT -->
+      <div class="trainer-screen" id="programScreenOverview">
+
+        <div class="daily-progress-row">
+          <span id="programProgressLabel">0 von 30 Tagen abgeschlossen</span>
+          <span id="programProgressPercent">0 %</span>
+        </div>
+        <div class="progress-track" id="programProgressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-fill" id="programProgressFill" style="width:0%;"></div>
+        </div>
+
+        <div class="metro-card program-today-card" id="programTodayCard">
+          <div class="daily-overview-day" id="programTodayDay">Tag 1 von 30</div>
+          <h3 id="programTodayTitle">—</h3>
+          <p class="trainer-prep-description" id="programTodaySubtitle"></p>
+          <button class="btn btn-primary btn-block metro-start-btn" type="button" id="programTodayStartBtn">▶ HEUTE TRAINIEREN</button>
+        </div>
+
+        <h3 class="program-list-heading">Alle 30 Tage</h3>
+        <div class="program-day-list" id="programDayList"></div>
+
+        <button class="btn btn-secondary" type="button" id="programResetBtn">PROGRAMM ZURÜCKSETZEN</button>
+      </div>
+
+      <!-- TAGESDETAIL -->
+      <div class="trainer-screen" id="programScreenDetail" hidden>
+        <div class="metro-card">
+          <div class="daily-overview-day" id="programDetailDay">Tag 1 von 30</div>
+          <h3 id="programDetailTitle">—</h3>
+          <p class="trainer-prep-description" id="programDetailSubtitle"></p>
+          <p id="programDetailDescription"></p>
+          <p class="program-detail-goal" id="programDetailGoal"></p>
+          <div class="trainer-detail-tags">
+            <span class="tag tag-duration" id="programDetailDuration">0 Minuten</span>
+            <span class="tag tag-level" id="programDetailMilestone" hidden>Meilenstein</span>
+          </div>
+
+          <p class="program-locked-hint" id="programDetailLockedHint" hidden></p>
+          <p class="program-detail-error" id="programDetailError" hidden role="alert"></p>
+
+          <div class="trainer-prep-actions">
+            <button class="btn btn-secondary" type="button" id="programDetailBackBtn">Zurück</button>
+            <button class="btn btn-primary btn-block" type="button" id="programDetailStartBtn">▶ TRAINING STARTEN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESET-BESTÄTIGUNG -->
+      <div class="trainer-screen" id="programScreenConfirmReset" hidden>
+        <div class="metro-card trainer-results-card">
+          <h3>Programm wirklich zurücksetzen?</h3>
+          <p>Dein bisheriger Programmfortschritt wird gelöscht. Andere Daten (Akkorde, Übungen, Trainingspläne, Favoriten) bleiben erhalten.</p>
+          <div class="trainer-results-actions">
+            <button class="btn btn-primary" type="button" id="programConfirmResetBtn">ZURÜCKSETZEN</button>
+            <button class="btn btn-secondary" type="button" id="programCancelResetBtn">ABBRECHEN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGRAMM ABGESCHLOSSEN -->
+      <div class="trainer-screen" id="programScreenComplete" hidden>
+        <div class="metro-card trainer-results-card">
+          <h3>30-Tage-Programm geschafft!</h3>
+          <p id="programCompleteText"></p>
+          <button class="btn btn-primary" type="button" id="programCompleteDoneBtn">WEITER ÜBEN</button>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="view" id="view-bibliothek" data-view="bibliothek">
+
+      <h2 class="section-title" style="margin-top:0;">Übungsbibliothek</h2>
+
+      <!-- LISTE -->
+      <div class="trainer-screen" id="libraryScreenList">
+
+        <label for="librarySearchInput" class="library-search-label">Übungen suchen</label>
+        <input type="search" class="chord-search-input" id="librarySearchInput"
+          placeholder="🔍 Übungen suchen …" aria-label="Übungen suchen">
+
+        <div class="field">
+          <label id="libraryCategoryLabel">Kategorie</label>
+          <div class="chip-row" id="libraryCategoryRow" aria-labelledby="libraryCategoryLabel"></div>
+        </div>
+
+        <div class="field">
+          <label id="libraryLevelLabel">Schwierigkeit</label>
+          <div class="chip-row" id="libraryLevelRow" aria-labelledby="libraryLevelLabel"></div>
+        </div>
+
+        <div class="field">
+          <label id="libraryDurationLabel">Dauer</label>
+          <div class="chip-row" id="libraryDurationRow" aria-labelledby="libraryDurationLabel"></div>
+        </div>
+
+        <div class="library-toolbar">
+          <button type="button" class="chip" id="libraryFavoritesToggle" aria-pressed="false">☆ Nur Favoriten</button>
+
+          <label for="librarySortSelect" class="library-sort-label">Sortieren nach</label>
+          <select id="librarySortSelect" class="library-sort-select">
+            <option value="relevance">Relevanz</option>
+            <option value="name">Name</option>
+            <option value="difficulty">Schwierigkeit</option>
+            <option value="duration">Dauer</option>
+          </select>
+
+          <button type="button" class="btn btn-secondary btn-small" id="libraryResetBtn">Filter zurücksetzen</button>
+        </div>
+
+        <p class="library-result-count" id="libraryResultCount"></p>
+
+        <div class="card-grid" id="libraryGrid"></div>
+
+      </div>
+
+      <!-- DETAILANSICHT -->
+      <div class="trainer-screen" id="libraryScreenDetail" hidden>
+        <button type="button" class="btn btn-secondary btn-small" id="libraryDetailBackBtn">← Zur Übungsbibliothek</button>
+        <div class="metro-card" id="libraryDetailBody"></div>
+      </div>
+
+    </section>
+
+    <section class="view" id="view-fortschritt" data-view="fortschritt">
+
+      <h2 class="section-title" style="margin-top:0;">Fortschritt</h2>
+
+      <!-- LEERZUSTAND (neuer Benutzer / noch kein Training) -->
+      <div class="metro-card" id="progressEmptyState" hidden>
+        <h3>Noch keine Trainingsdaten</h3>
+        <p>Sobald du dein erstes Training abschließt, erscheint hier dein Fortschritt.</p>
+        <button class="btn btn-primary btn-block" type="button" id="progressEmptyStartBtn">Erstes Training starten</button>
+      </div>
+
+      <div id="progressRoot">
+
+        <!-- HEUTE -->
+        <div class="metro-card program-today-card" id="progressTodayCard"></div>
+
+        <!-- KENNZAHLEN -->
+        <div class="progress-stat-grid">
+          <div class="metro-card progress-stat-card">
+            <span class="progress-stat-label">Übungszeit</span>
+            <span class="progress-stat-value" id="progressStatTime">0 Min.</span>
+          </div>
+          <div class="metro-card progress-stat-card">
+            <span class="progress-stat-label">Trainingstage</span>
+            <span class="progress-stat-value" id="progressStatDays">0</span>
+          </div>
+          <div class="metro-card progress-stat-card">
+            <span class="progress-stat-label">Trainingseinheiten</span>
+            <span class="progress-stat-value" id="progressStatSessions">0</span>
+          </div>
+          <div class="metro-card progress-stat-card" id="progressStatStreak">
+            <span class="progress-stat-label">Serie</span>
+          </div>
+        </div>
+
+        <!-- 30-TAGE-PROGRAMM -->
+        <div class="metro-card" id="progressProgramCard" hidden></div>
+
+        <!-- MEILENSTEINE -->
+        <div class="metro-card" id="progressMilestonesCard" hidden></div>
+
+        <!-- DIESE WOCHE -->
+        <div class="metro-card">
+          <h3>Diese Woche</h3>
+          <div class="progress-week-row" id="progressWeekRow"></div>
+        </div>
+
+        <!-- MONATSÜBERSICHT -->
+        <div class="metro-card">
+          <h3 id="progressMonthLabel">Monat</h3>
+          <div class="progress-month-grid" id="progressMonthGrid" aria-hidden="true"></div>
+          <p class="progress-month-hint">● markiert Tage mit abgeschlossenem Training.</p>
+        </div>
+
+        <!-- LETZTES TRAINING -->
+        <div class="metro-card" id="progressLastActivity"></div>
+
+        <!-- LETZTE AKTIVITÄTEN -->
+        <div class="metro-card">
+          <h3>Letzte Aktivitäten</h3>
+          <div class="daily-section-list" id="progressRecentList"></div>
+        </div>
+
+        <!-- AKKORDFORTSCHRITT -->
+        <div class="metro-card" id="progressChordProgress"></div>
+
+        <!-- AKKORDWECHSEL-FORTSCHRITT -->
+        <div class="metro-card" id="progressChordChangeProgress"></div>
+
+        <!-- BESTLEISTUNGEN -->
+        <div class="metro-card" id="progressBestPerformances" hidden></div>
+
+        <!-- TREND -->
+        <div class="metro-card" id="progressTrend"></div>
+
+        <!-- ALS NÄCHSTES -->
+        <div class="metro-card program-today-card" id="progressNextTrainingCard" hidden>
+          <h3>Als Nächstes</h3>
+          <p class="progress-next-context"></p>
+          <div class="progress-next-title"></div>
+          <div class="progress-next-duration"></div>
+          <button class="btn btn-primary btn-block metro-start-btn" type="button" id="progressNextTrainingBtn">▶ Training starten</button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="view" id="view-tagebuch" data-view="tagebuch">
+      <div class="placeholder">
+        <h2>Tagebuch</h2>
+        <p>Das Übungstagebuch folgt in einer späteren Phase.</p>
+      </div>
+    </section>
+
+    <!-- EINSTELLUNGEN -->
+    <section class="view" id="view-einstellungen" data-view="einstellungen">
+      <h2 class="section-title" style="margin-top:0;">Einstellungen</h2>
+      <form class="settings-form" id="settingsForm">
+
+        <div class="field">
+          <label for="userName">Name</label>
+          <input type="text" id="userName" name="userName" placeholder="Dein Name" autocomplete="name">
+        </div>
+
+        <div class="field">
+          <label id="durationLabel">Tägliche Übungsdauer</label>
+          <div class="duration-grid" id="durationGrid" role="group" aria-labelledby="durationLabel"></div>
+        </div>
+
+        <div>
+          <button type="submit" class="btn btn-primary">Einstellungen speichern</button>
+          <div class="save-status" id="saveStatus" role="status" aria-live="polite"></div>
+        </div>
+
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>Acoustix Guitar — Guitar Practice Trainer</span>
+      <span>© <span id="year"></span> Wolfram Fiedler</span>
+    </div>
+  </footer>
+
+  <!-- ÜBUNGSTIMER — wiederverwendbares Overlay, einsetzbar für jede Übung und Trainingseinheit -->
+  <div class="timer-overlay" id="timerOverlay" hidden>
+    <div class="timer-panel" role="dialog" aria-modal="true" aria-labelledby="timerExerciseTitle">
+      <div class="timer-header">
+        <div class="timer-exercise" id="timerExerciseTitle">Übung</div>
+        <button class="timer-close" id="timerCloseBtn" type="button" aria-label="Timer schließen">✕</button>
+      </div>
+
+      <div class="timer-display" id="timerDisplay">00:00</div>
+
+      <div class="progress-track timer-progress-track" id="timerProgressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+        <div class="progress-fill" id="timerProgressFill" style="width:100%;"></div>
+      </div>
+
+      <div class="timer-status" id="timerStatus" role="status" aria-live="polite"></div>
+
+      <div class="timer-controls">
+        <button class="btn btn-secondary" id="timerResetBtn" type="button">Reset</button>
+        <button class="btn btn-primary" id="timerPrimaryBtn" type="button">▶ Start</button>
+        <button class="btn btn-secondary" id="timerStopBtn" type="button">Beenden</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Daten zuerst laden (werden von js/state.js benötigt) -->
+<script src="data/exercises.js"></script>
+<script src="data/chords.js"></script>
+<script src="data/songs.js"></script>
+<script src="data/training-plans.js"></script>
+<script src="data/programs.js"></script>
+
+<!-- Anwendungsmodule. Kein Build-System: klassische Skripte,
+     die sich einen gemeinsamen globalen Gültigkeitsbereich
+     teilen (funktioniert auch direkt über file://). -->
+<script src="js/state.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/timer.js"></script>
+<script src="js/metronome.js"></script>
+<script src="js/chords.js"></script>
+<script src="js/training.js"></script>
+<script src="js/exercises.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/training-plans.js"></script>
+<script src="js/programs.js"></script>
+<script src="js/exercise-library.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
