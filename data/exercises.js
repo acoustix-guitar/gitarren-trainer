@@ -108,6 +108,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "C – G",
     description: "Wechsle zwischen C-Dur und G-Dur.",
     category: "basic",
+    exerciseType: "chord-change",
     difficulty: 1,
     chords: ["C", "G"],
     bpm: 60,
@@ -126,6 +127,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "G – D",
     description: "Wechsle zwischen G-Dur und D-Dur.",
     category: "basic",
+    exerciseType: "chord-change",
     difficulty: 1,
     chords: ["G", "D"],
     bpm: 60,
@@ -144,6 +146,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "Am – C",
     description: "Wechsle zwischen A-Moll und C-Dur.",
     category: "basic",
+    exerciseType: "chord-change",
     difficulty: 1,
     chords: ["Am", "C"],
     bpm: 60,
@@ -162,6 +165,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "C – Am",
     description: "Wechsle zwischen C-Dur und A-Moll.",
     category: "basic",
+    exerciseType: "chord-change",
     difficulty: 1,
     chords: ["C", "Am"],
     bpm: 60,
@@ -180,6 +184,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "D – G",
     description: "Wechsle zwischen D-Dur und G-Dur.",
     category: "basic",
+    exerciseType: "chord-change",
     difficulty: 1,
     chords: ["D", "G"],
     bpm: 60,
@@ -198,6 +203,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "Em – C",
     description: "Wechsle zwischen E-Moll und C-Dur.",
     category: "basic",
+    exerciseType: "chord-change",
     difficulty: 1,
     chords: ["Em", "C"],
     bpm: 60,
@@ -220,6 +226,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "G – C – D",
     description: "Dreiklang-Wechsel über G-Dur, C-Dur und D-Dur.",
     category: "progression",
+    exerciseType: "chord-change",
     difficulty: 2,
     chords: ["G", "C", "D"],
     bpm: 65,
@@ -238,6 +245,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "C – G – Am – F",
     description: "Klassische Vierakkordfolge über C-Dur, G-Dur, A-Moll und F-Dur.",
     category: "progression",
+    exerciseType: "chord-change",
     difficulty: 2,
     chords: ["C", "G", "Am", "F"],
     bpm: 65,
@@ -256,6 +264,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "Am – Dm – E",
     description: "Moll-geprägte Folge über A-Moll, D-Moll und E-Dur.",
     category: "progression",
+    exerciseType: "chord-change",
     difficulty: 2,
     chords: ["Am", "Dm", "E"],
     bpm: 60,
@@ -274,6 +283,7 @@ const CHORD_CHANGE_EXERCISES = [
     shortName: "C – Am – F – G",
     description: "Sehr geläufige Vierakkordfolge über C-Dur, A-Moll, F-Dur und G-Dur.",
     category: "progression",
+    exerciseType: "chord-change",
     difficulty: 2,
     chords: ["C", "Am", "F", "G"],
     bpm: 70,
@@ -287,4 +297,167 @@ const CHORD_CHANGE_EXERCISES = [
   }
 
 ];
+
+/* ============================================================
+   RHYTHMUSÜBUNGEN (Phase 11)
+   Ergänzen dieselbe zentrale Übungsliste um exerciseType: "rhythm".
+   `pattern` ist ein Array von Symbolen — ein Eintrag pro Zeitschritt.
+   Die zeitliche Position jedes Schritts ergibt sich generisch aus
+   timeSignature + subdivision (siehe js/rhythm-trainer.js,
+   parseRhythmPattern()) — nicht aus der Reihenfolge im Array allein.
+   Symbole: "D" = Abschlag, "U" = Aufschlag, "-" = Pause (kein Anschlag)
+   ============================================================ */
+
+CHORD_CHANGE_EXERCISES.push(
+
+  // ==========================================
+  // RHYTHMUS – VIERTEL (Grundlagen)
+  // ==========================================
+
+  {
+    id: "rhythm-quarter-basic-01",
+    name: "Viertel-Grundschlag",
+    shortName: "Viertel",
+    description: "Ein gleichmäßiger Abschlag auf jeder Zählzeit — die Basis jedes Rhythmusgefühls.",
+    category: "rhythm-basic",
+    difficulty: 1,
+    exerciseType: "rhythm",
+    bpm: 70,
+    duration: 60,
+    timeSignature: "4/4",
+    subdivision: "quarter",
+    accent: true,
+    countIn: 2,
+    pattern: ["D", "D", "D", "D"]
+  },
+
+  {
+    id: "rhythm-quarter-rest-01",
+    name: "Viertel mit Pausen",
+    shortName: "Viertel & Pause",
+    description: "Abschlag auf 1 und 3, Pause auf 2 und 4 — trainiert bewusstes Zählen.",
+    category: "rhythm-basic",
+    difficulty: 1,
+    exerciseType: "rhythm",
+    bpm: 70,
+    duration: 60,
+    timeSignature: "4/4",
+    subdivision: "quarter",
+    accent: true,
+    countIn: 2,
+    pattern: ["D", "-", "D", "-"]
+  },
+
+  {
+    id: "rhythm-waltz-01",
+    name: "Walzertakt",
+    shortName: "3/4-Takt",
+    description: "Drei gleichmäßige Abschläge im 3/4-Takt.",
+    category: "rhythm-basic",
+    difficulty: 1,
+    exerciseType: "rhythm",
+    bpm: 90,
+    duration: 60,
+    timeSignature: "3/4",
+    subdivision: "quarter",
+    accent: true,
+    countIn: 2,
+    pattern: ["D", "D", "D"]
+  },
+
+  // ==========================================
+  // RHYTHMUS – ACHTEL (Strumming)
+  // ==========================================
+
+  {
+    id: "rhythm-eighth-straight-01",
+    name: "Durchgehendes Achtel-Strumming",
+    shortName: "Achtel D-U",
+    description: "Ab- und Aufschlag im gleichmäßigen Wechsel — die Grundlage jedes Begleitrhythmus.",
+    category: "rhythm-eighth",
+    difficulty: 2,
+    exerciseType: "rhythm",
+    bpm: 75,
+    duration: 60,
+    timeSignature: "4/4",
+    subdivision: "eighth",
+    accent: true,
+    countIn: 2,
+    pattern: ["D", "U", "D", "U", "D", "U", "D", "U"]
+  },
+
+  {
+    id: "rhythm-eighth-folk-01",
+    name: "Klassisches Begleitmuster",
+    shortName: "D DU UDU",
+    description: "Ein sehr geläufiges akustisches Strumming-Muster mit ausgelassenen Schlägen.",
+    category: "rhythm-eighth",
+    difficulty: 2,
+    exerciseType: "rhythm",
+    bpm: 75,
+    duration: 60,
+    timeSignature: "4/4",
+    subdivision: "eighth",
+    accent: true,
+    countIn: 2,
+    pattern: ["D", "-", "D", "U", "-", "U", "D", "U"]
+  },
+
+  {
+    id: "rhythm-eighth-swing-01",
+    name: "Achtel im Swing-Gefühl",
+    shortName: "Swing-Achtel",
+    description: "Dieselbe Achtelfolge, diesmal mit Swing statt geradem Timing.",
+    category: "rhythm-eighth",
+    difficulty: 2,
+    exerciseType: "rhythm",
+    bpm: 80,
+    duration: 60,
+    timeSignature: "4/4",
+    subdivision: "eighth",
+    accent: true,
+    countIn: 2,
+    swing: 0.62,
+    pattern: ["D", "U", "D", "U", "D", "U", "D", "U"]
+  },
+
+  // ==========================================
+  // RHYTHMUS – SYNKOPEN & SECHZEHNTEL (fortgeschritten)
+  // ==========================================
+
+  {
+    id: "rhythm-eighth-syncopated-01",
+    name: "Synkopiertes Muster",
+    shortName: "Synkope",
+    description: "Eine Pause an unerwarteter Stelle verschiebt die Betonung — ein Einstieg ins Synkopieren.",
+    category: "rhythm-syncopation",
+    difficulty: 3,
+    exerciseType: "rhythm",
+    bpm: 80,
+    duration: 60,
+    timeSignature: "4/4",
+    subdivision: "eighth",
+    accent: true,
+    countIn: 2,
+    pattern: ["D", "-", "U", "D", "-", "U", "D", "U"]
+  },
+
+  {
+    id: "rhythm-sixteenth-intro-01",
+    name: "Einstieg ins Sechzehntel-Zählen",
+    shortName: "Sechzehntel-Intro",
+    description: "Ein Abschlag auf jeder Hauptzählzeit, gezählt in Sechzehnteln — gewöhnt das Ohr an die feinere Unterteilung.",
+    category: "rhythm-sixteenth",
+    difficulty: 3,
+    exerciseType: "rhythm",
+    bpm: 60,
+    duration: 60,
+    timeSignature: "4/4",
+    subdivision: "sixteenth",
+    accent: true,
+    countIn: 2,
+    pattern: ["D", "-", "-", "-", "D", "-", "-", "-", "D", "-", "-", "-", "D", "-", "-", "-"]
+  }
+
+);
 
