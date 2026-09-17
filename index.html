@@ -19,7 +19,7 @@
             <circle cx="17" cy="17" r="6.5" fill="#FAF6EE"/>
             <circle cx="17" cy="17" r="2.4" fill="#3E6C6A"/>
           </svg>
-          <span class="brand-title">ACOUSTIX GUITAR (V.01)</span>
+          <span class="brand-title">ACOUSTIX GUITAR</span>
         </div>
         <span class="brand-eyebrow">Wolfram Fiedler</span>
       </div>
@@ -248,6 +248,68 @@
             <button class="btn btn-primary" type="button" id="trainerAgainBtn">NOCHMAL</button>
             <button class="btn btn-secondary" type="button" id="trainerOtherBtn">ANDERE ÜBUNG</button>
             <button class="btn btn-secondary" type="button" id="trainerDoneBtn">FERTIG</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RHYTHMUSTRAINER (Phase 11) — teilt sich diese Ansicht mit dem Akkordwechseltrainer -->
+
+      <div class="trainer-screen" id="rhythmScreenPrep" hidden>
+        <div class="metro-card">
+          <h3 id="rhythmPrepName">—</h3>
+          <p class="trainer-prep-description" id="rhythmPrepDescription"></p>
+          <div class="rhythm-pattern-preview" id="rhythmPrepPatternPreview" aria-hidden="true"></div>
+          <p class="rhythm-pattern-legend">D = Abschlag · U = Aufschlag · – = Pause</p>
+
+          <div class="field">
+            <label id="rhythmTempoLabel">Tempo</label>
+            <div class="metro-bpm-controls" role="group" aria-labelledby="rhythmTempoLabel">
+              <button class="btn btn-secondary btn-small" type="button" data-rhythm-bpm-step="-5" aria-label="Minus 5 BPM">−5</button>
+              <button class="btn btn-secondary btn-small" type="button" data-rhythm-bpm-step="-1" aria-label="Minus 1 BPM">−</button>
+              <span class="trainer-prep-bpm" id="rhythmPrepBpm">70</span>
+              <button class="btn btn-secondary btn-small" type="button" data-rhythm-bpm-step="1" aria-label="Plus 1 BPM">+</button>
+              <button class="btn btn-secondary btn-small" type="button" data-rhythm-bpm-step="5" aria-label="Plus 5 BPM">+5</button>
+            </div>
+          </div>
+
+          <div class="trainer-prep-actions">
+            <button class="btn btn-secondary" type="button" id="rhythmBackToListBtn">Zurück</button>
+            <button class="btn btn-primary btn-block" type="button" id="rhythmStartBtn">▶ TRAINING STARTEN</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="trainer-screen" id="rhythmScreenActive" hidden>
+
+        <div class="trainer-countin" id="rhythmCountIn" hidden>
+          <div class="trainer-countin-label">Einzählen</div>
+          <div class="trainer-countin-number" id="rhythmCountInNumber">1</div>
+          <div class="trainer-countin-hint" id="rhythmCountInHint"></div>
+        </div>
+
+        <div class="trainer-active" id="rhythmActive" hidden>
+          <div class="trainer-progress-row">
+            <span class="trainer-progress-time" id="rhythmProgressDisplay">00:60</span>
+            <span class="trainer-progress-changes" id="rhythmRepeatsDisplay">Wiederholungen: 0</span>
+          </div>
+
+          <div class="rhythm-pattern-stage" id="rhythmPatternStage"></div>
+
+          <div class="trainer-controls">
+            <button class="btn btn-secondary" type="button" id="rhythmPauseBtn">PAUSE</button>
+            <button class="btn btn-secondary" type="button" id="rhythmStopBtn">STOPP</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="trainer-screen" id="rhythmScreenResults" hidden>
+        <div class="metro-card trainer-results-card">
+          <h3>Training beendet</h3>
+          <div class="trainer-results-name" id="rhythmResultsName">—</div>
+          <div class="trainer-results-stats" id="rhythmResultsStats"></div>
+          <div class="trainer-results-actions">
+            <button class="btn btn-primary" type="button" id="rhythmAgainBtn">NOCHMAL</button>
+            <button class="btn btn-secondary" type="button" id="rhythmDoneBtn">FERTIG</button>
           </div>
         </div>
       </div>
@@ -700,6 +762,7 @@
 <script src="js/chords.js"></script>
 <script src="js/training.js"></script>
 <script src="js/exercises.js"></script>
+<script src="js/rhythm-trainer.js"></script>
 <script src="js/progress.js"></script>
 <script src="js/training-plans.js"></script>
 <script src="js/programs.js"></script>
