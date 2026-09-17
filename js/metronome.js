@@ -126,8 +126,10 @@ const metronome = {
   lookaheadMs: 25,
   pendulumDirection: "left",
 
-  // Optionaler externer Beat-Hook (siehe drawLoop). Standardmäßig ungesetzt.
+  // Optionale externe Beat-Hooks (siehe scheduleBeat/drawLoop). Standardmäßig ungesetzt.
   onMainBeat: null,
+  onScheduleStep: null,
+  onAnyStep: null,
 
   tapTimestamps: [],
 
@@ -366,9 +368,19 @@ const metronome = {
     this.beatQueue.push({
       time: this.nextNoteTime,
       pulseIndex: this.currentPulseInMeasure,
+      subdivisionIndex: this.currentSubdivisionIndex,
       isMainBeat,
       isAccent
     });
+
+    // Additiver Hook: erlaubt anderen Modulen (z.B. dem Rhythmustrainer),
+    // zum exakten AudioContext-Zeitpunkt JEDES einzelnen Schritts (nicht nur
+    // der Hauptschläge) eigene Klänge einzuplanen — auf derselben Zeitbasis
+    // wie der Metronom-Klick selbst. Standardmäßig null, ohne jede Wirkung
+    // auf das bestehende Metronom-Verhalten.
+    if(typeof this.onScheduleStep === "function"){
+      this.onScheduleStep(this.nextNoteTime, this.currentPulseInMeasure, this.currentSubdivisionIndex, isMainBeat, isAccent);
+    }
   },
 
   playClick(time, isAccent, isSubdivision){
@@ -412,6 +424,14 @@ const metronome = {
     if(ctx){
       while(this.beatQueue.length && this.beatQueue[0].time <= ctx.currentTime){
         const note = this.beatQueue.shift();
+
+        // Additiver Hook: feuert für JEDEN Schritt (Haupt- und Unterteilungs-
+        // schläge), zeitlich synchron zur echten Audiowiedergabe — Grundlage
+        // für die Schritt-Anzeige des Rhythmustrainers. Standardmäßig null.
+        if(typeof this.onAnyStep === "function"){
+          this.onAnyStep(note.pulseIndex, note.subdivisionIndex, note.isMainBeat, note.isAccent);
+        }
+
         if(note.isMainBeat){
           state.metronome.currentBeat = note.pulseIndex;
           this.highlightBeat(note.pulseIndex, note.isAccent);

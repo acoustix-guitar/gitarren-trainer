@@ -47,6 +47,14 @@ const state = {
     activeFilter: "all",
     favoriteExerciseIds: []
   },
+  rhythmTrainer: {
+    active: false,
+    exerciseId: null,
+    bpm: 70,
+    remainingTime: 60,
+    isPaused: false,
+    completedRepeats: 0
+  },
   dailyTraining: {
     activeTrainingPlanId: null,
     currentTrainingDay: 1,

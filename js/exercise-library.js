@@ -13,7 +13,11 @@
 
 const LIBRARY_CATEGORY_LABELS = {
   basic: "Grundlagen (2 Akkorde)",
-  progression: "Akkordfolgen"
+  progression: "Akkordfolgen",
+  "rhythm-basic": "Rhythmus: Grundlagen",
+  "rhythm-eighth": "Rhythmus: Achtel",
+  "rhythm-sixteenth": "Rhythmus: Sechzehntel",
+  "rhythm-syncopation": "Rhythmus: Synkopen"
 };
 
 const LIBRARY_DURATION_BUCKETS = [
@@ -365,6 +369,12 @@ const exerciseLibrary = {
 
       ${chordNames ? `<h3>Akkorde</h3><p>${chordNames}</p>` : ""}
 
+      ${Array.isArray(exercise.pattern) ? `
+        <h3>Muster</h3>
+        <div class="rhythm-pattern-preview" id="libraryDetailPatternPreview" aria-hidden="true"></div>
+        <p class="rhythm-pattern-legend">D = Abschlag · U = Aufschlag · – = Pause</p>
+      ` : ""}
+
       ${stats.timesTrained > 0 ? `
         <h3>Trainingsstatus</h3>
         <p>✓ ${stats.timesTrained}× trainiert · zuletzt ${progress.formatRelativeDay(stats.lastTrainedAt)}${stats.bestBpm ? " · bestes Tempo " + stats.bestBpm + " BPM" : ""}</p>
@@ -380,6 +390,13 @@ const exerciseLibrary = {
 
       <button class="btn btn-primary btn-block metro-start-btn" type="button" data-library-start="${exercise.id}">▶ Übung starten</button>
     `;
+
+    if(Array.isArray(exercise.pattern) && typeof rhythmTrainer !== "undefined"){
+      rhythmTrainer.renderPatternRow(
+        document.getElementById("libraryDetailPatternPreview"),
+        rhythmTrainer.buildStepMeta(exercise)
+      );
+    }
   },
 
   /* ---------- Verknüpfungen (nur lesend, Punkt 25/41/42) ---------- */
@@ -423,6 +440,9 @@ const exerciseLibrary = {
     if(exerciseType === "chord-change"){
       navigation.goTo("trainer");
       chordChangeTrainer.selectExercise(id);
+    }else if(exerciseType === "rhythm"){
+      navigation.goTo("trainer");
+      rhythmTrainer.selectExercise(id);
     }else{
       console.warn("Unbekannter Übungstyp, kann nicht gestartet werden:", exerciseType);
     }

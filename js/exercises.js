@@ -277,7 +277,11 @@ const chordChangeTrainer = {
   },
 
   getVisibleExercises(){
-    let list = this.searchExercises(state.chordChangeTrainer.searchQuery);
+    // Diese Liste ist ausschließlich für Akkordwechsel-Übungen gedacht —
+    // andere Übungstypen (z.B. "rhythm") haben ihren eigenen Trainer und
+    // erscheinen stattdessen in der Übungsbibliothek.
+    let list = this.searchExercises(state.chordChangeTrainer.searchQuery)
+      .filter(ex => !ex.exerciseType || ex.exerciseType === "chord-change");
     if(state.chordChangeTrainer.activeFilter !== "all"){
       const def = TRAINER_FILTERS.find(f => f.id === state.chordChangeTrainer.activeFilter);
       if(def) list = list.filter(def.test);
@@ -298,18 +302,25 @@ const chordChangeTrainer = {
 
     CHORD_CHANGE_EXERCISES.forEach((ex, index) => {
       const ref = ex && ex.id ? ex.id : `Index ${index}`;
+      // Andere Übungstypen (z.B. "rhythm") validieren ihre typspezifischen
+      // Felder selbst in ihrem eigenen Modul — hier nur die universellen
+      // Felder plus die Akkordwechsel-spezifischen Prüfungen für den
+      // Standardtyp "chord-change".
+      const isChordChange = !ex.exerciseType || ex.exerciseType === "chord-change";
 
       if(!ex.id) fail(`Eintrag ${index} hat keine id.`);
       if(!ex.name) fail(`${ref}: kein name gesetzt.`);
 
-      if(!Array.isArray(ex.chords) || ex.chords.length < 2){
-        fail(`${ref}: chords muss ein Array mit mindestens 2 Akkord-IDs sein.`);
-      }else{
-        ex.chords.forEach(chordId => {
-          if(!chordDatabase.getChordById(chordId)){
-            fail(`Übung "${ref}": Akkord "${chordId}" wurde in der Akkorddatenbank nicht gefunden.`);
-          }
-        });
+      if(isChordChange){
+        if(!Array.isArray(ex.chords) || ex.chords.length < 2){
+          fail(`${ref}: chords muss ein Array mit mindestens 2 Akkord-IDs sein.`);
+        }else{
+          ex.chords.forEach(chordId => {
+            if(!chordDatabase.getChordById(chordId)){
+              fail(`Übung "${ref}": Akkord "${chordId}" wurde in der Akkorddatenbank nicht gefunden.`);
+            }
+          });
+        }
       }
 
       if(typeof ex.bpm !== "number" || ex.bpm < 40 || ex.bpm > 240){
@@ -343,6 +354,10 @@ const chordChangeTrainer = {
     this.els.screenPrep.hidden = name !== "prep";
     this.els.screenActive.hidden = name !== "training";
     this.els.screenResults.hidden = name !== "results";
+
+    // Rhythmustrainer teilt sich dieselbe Trainer-Ansicht (Phase 11) —
+    // beim Wechsel zu einer Akkordwechsel-Übung dessen Screens ausblenden.
+    if(typeof rhythmTrainer !== "undefined") rhythmTrainer.hideAllScreens();
   },
 
   showTrainingSubPanel(which){

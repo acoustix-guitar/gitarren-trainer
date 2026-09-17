@@ -24,7 +24,8 @@ const ACTIVITY_TYPE_LABELS = {
   warmup: "Aufwärmen",
   metronome: "Metronom",
   "free-practice": "Freies Spielen",
-  rest: "Pause"
+  rest: "Pause",
+  rhythm: "Rhythmus"
 };
 
 const WEEKDAY_LABELS_SHORT = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
@@ -159,9 +160,10 @@ const progress = {
     return this.activities.length;
   },
 
-  /** "Übungen" — nur Aktivitäten vom Typ "exercise". */
+  /** "Übungen" — Aktivitäten vom Typ "exercise" oder "rhythm" (beides sind
+   *  vollwertige, in der Übungsbibliothek geführte Übungen). */
   calculateCompletedExercises(){
-    return this.activities.filter(a => a.type === "exercise").length;
+    return this.activities.filter(a => a.type === "exercise" || a.type === "rhythm").length;
   },
 
   localDateKey(timestamp){
@@ -347,9 +349,11 @@ const progress = {
   },
 
   /** Trainingsstatus einer einzelnen Übung — von der Übungsbibliothek
-   *  gelesen, aber ausschließlich von Progress berechnet (Punkt 40). */
+   *  gelesen, aber ausschließlich von Progress berechnet (Punkt 40).
+   *  exerciseId ist bereits eindeutig, daher unabhängig vom Aktivitätstyp
+   *  (deckt sowohl "exercise" als auch "rhythm" ab). */
   getExerciseStats(exerciseId){
-    const matches = this.activities.filter(a => a.type === "exercise" && a.exerciseId === exerciseId);
+    const matches = this.activities.filter(a => a.exerciseId === exerciseId);
     if(!matches.length) return { timesTrained: 0, lastTrainedAt: null, bestBpm: null };
 
     const bpmValues = matches.filter(a => typeof a.bpm === "number").map(a => a.bpm);

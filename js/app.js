@@ -183,6 +183,7 @@ function init(){
   metronome.initMetronome();
   chordDatabase.initChordDatabase();
   chordChangeTrainer.initChordChangeTrainer();
+  rhythmTrainer.initRhythmTrainer();
   progress.initProgress();
   dailyTraining.initDailyTraining();
   programs.init30DayProgram();
